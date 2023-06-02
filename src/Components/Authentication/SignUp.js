@@ -101,10 +101,10 @@ const SignUp = () => {
               ref={confirmPasswordRef}
             />
           </Form.Group>
-          <div className="text-center">
+          <div className="text-center mt-4">
             {!isLoading ? (
-              <Button variant="info" type="submit" className="my-3 text-white">
-                Submit
+              <Button variant="info" type="submit" className="text-white" style={{maxWidth:"100%", width:"100%"}}>
+                Sign Up
               </Button>
             ) : (
               <p style={{ color: "rgb(10, 216, 248)" }}>Sending request...</p>
