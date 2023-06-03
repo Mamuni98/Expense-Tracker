@@ -1,10 +1,12 @@
 import { Card, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import axios from "axios";
+import AuthContext from "../contexts/auth-context";
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const authCntxt = useContext(AuthContext);
   const emailRef = useRef();
   const passwordRef = useRef();
   const history = useNavigate();
@@ -26,7 +28,7 @@ const LogIn = () => {
       const token = response.data.idToken;
       if (token) {
         alert("Successfully Logged In");
-        localStorage.setItem("token", token);
+        authCntxt.LogIn(token);
         history("/home");
       }
     } catch (err) {
