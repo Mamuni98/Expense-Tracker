@@ -1,8 +1,15 @@
-import React, { useRef, useContext } from "react";
+import React, {
+  useRef,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../contexts/auth-context";
+import { FaUserCircle } from "react-icons/fa";
 
 const Profile = () => {
   const authCntxt = useContext(AuthContext);
@@ -10,6 +17,28 @@ const Profile = () => {
   const genderRef = useRef();
   const dobRef = useRef();
   const numberRef = useRef();
+  const [userDisplay, setUserDisplay] = useState({});
+
+  const getUserDetail = useCallback(async () => {
+    try {
+      const response = await axios.post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
+        {
+          idToken: authCntxt.token,
+        }
+      );
+      const user = {
+        name: response.users.displayName,
+        email: response.users.email,
+      };
+      setUserDisplay(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [authCntxt.token]);
+  useEffect(() => {
+    getUserDetail();
+  }, [getUserDetail]);
 
   const formSubmitHandler = async (event) => {
     event.preventDefault();
@@ -22,7 +51,6 @@ const Profile = () => {
         number: numberRef.current.value,
       };
       console.log(details);
-      console.log(authCntxt.token);
       const response = await axios.post(
         "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
         {
@@ -35,10 +63,50 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
-    event.target.reset();
   };
   return (
     <Container className="w-75">
+      <Card
+        className="p-3"
+        style={{
+          boxShadow: "0 4px 10px rgba(16, 192, 241, 1)",
+          backgroundColor: "rgb(253, 253, 216)",
+          borderRadius: "20px",
+          maxWidth: "70%",
+          margin: "1rem auto",
+        }}
+      >
+        <div className="d-flex flex-row justify-content-around">
+          <FaUserCircle size="150px" color="grey" />
+          <div className="d-flex flex-column">
+            <h2
+              style={{
+                fontFamily: "cursive",
+                color: "aqua",
+                fontWeight: "bold",
+              }}
+            >
+              {userDisplay.name}
+            </h2>
+            <h4
+              style={{
+                fontFamily: "cursive",
+                color: "grey",
+                fontWeight: "bold",
+                marginBottom: "1.5rem",
+              }}
+            >
+              {userDisplay.email}
+            </h4>
+            <Button
+              variant="outline-dark"
+              style={{ maxWidth: "25%", width: "100%" }}
+            >
+              Edit
+            </Button>
+          </div>
+        </div>
+      </Card>
       <Card
         className="p-3"
         style={{
