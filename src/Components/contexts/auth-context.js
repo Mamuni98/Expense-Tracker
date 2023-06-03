@@ -27,6 +27,9 @@ export const AuthContextProvider = (props) => {
     if(updatedLoggedIn){
       setUserProfile(true);
     }
+    else{
+      setUserProfile(false);
+    }
   }
   const contextValue = {
     token: token,

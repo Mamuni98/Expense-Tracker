@@ -12,7 +12,7 @@ const Home = () => {
         Welcome to my expense tracker website...
       </h2>
       <div className="text-end">
-        {authCntxt.userProfile && <Button variant="info">
+        {!authCntxt.userProfile && <Button variant="info">
           Your profile is incomplete.
           <Link to="/profile">
             <Badge bg="info">Complete now</Badge>

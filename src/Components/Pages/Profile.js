@@ -12,7 +12,7 @@ const Profile = () => {
   const numberRef = useRef();
   const [userDisplay, setUserDisplay] = useState("");
   const [updateForm, setupdateForm] = useState(false);
- 
+  const [verified, setVerified] = useState(false);
   useEffect(() => {
     const getUserDetail = async () => {
       try {
@@ -44,7 +44,7 @@ const Profile = () => {
     setupdateForm(false);
   };
 
-  const verifyEmailHandler =  async (event) => {
+  const verifyEmailHandler = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post(
@@ -54,8 +54,9 @@ const Profile = () => {
           idToken: authCntxt.token,
         }
       );
-      if (response.data) {
+      if (response) {
         alert("Successfully verified user email");
+        setVerified(true);
       }
     } catch (err) {
       const alertmsg = err.response.data.error.message;
@@ -76,7 +77,7 @@ const Profile = () => {
           returnSecureToken: true,
         }
       );
-      if (response.data) {
+      if (response) {
         alert("Updated Successfully");
         authCntxt.addeduserProfile();
       }
@@ -111,9 +112,13 @@ const Profile = () => {
             >
               {userDisplay}
             </h2>
-            <Button variant="secondary" onClick={verifyEmailHandler}>
-              Verify Email
-            </Button>
+            {!verified ? (
+              <Button variant="secondary" onClick={verifyEmailHandler}>
+                Verify Email
+              </Button>
+            ) : (
+              <Button variant="success">Email Verified</Button>
+            )}
             <Button variant="outline-dark" onClick={showUpdateForm}>
               Edit
             </Button>
