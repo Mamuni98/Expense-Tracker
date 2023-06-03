@@ -1,19 +1,26 @@
+import React, { useContext } from "react";
 import LogIn from "./Components/Authentication/LogIn";
 import SignUp from "./Components/Authentication/SignUp";
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Components/Pages/Home";
 import Profile from "./Components/Pages/Profile";
-
+import TheNavbar from "./Components/Navbar/TheNavbar";
+import AuthContext from "./Components/contexts/auth-context";
 
 function App() {
+  const authCntxt = useContext(AuthContext);
+  const { IsLoggedIn } = authCntxt;
   return (
     <>
+      <TheNavbar />
       <Routes>
-        <Route path="/" element={<SignUp/>}/>
-        <Route path="/logIn" element={<LogIn/>}/>
-        <Route path="/home" element={<Home/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-
+        {!IsLoggedIn && <Route path="/" element={<SignUp />} />}
+        {!IsLoggedIn && <Route path="/logIn" element={<LogIn />} />}
+        <Route
+          path="/home"
+          element={IsLoggedIn ? <Home /> : <Navigate replace to="/" />}
+        />
+        {IsLoggedIn && <Route path="/profile" element={<Profile />} />}
       </Routes>
     </>
   );

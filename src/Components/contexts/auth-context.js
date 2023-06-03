@@ -9,8 +9,11 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
+  const [userProfile, setUserProfile] = useState(false);
   const history = useNavigate();
   const updatedLoggedIn = !!token;
+
+
   const logInHandler = (token) => {
     setToken(token);
     localStorage.setItem("token", token);
@@ -20,11 +23,18 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     history("/");
   };
+  const addedUserProfileHadler =() => {
+    if(updatedLoggedIn){
+      setUserProfile(true);
+    }
+  }
   const contextValue = {
     token: token,
     IsLoggedIn: updatedLoggedIn,
     LogIn: logInHandler,
     LogOut: logOutHandler,
+    addedUserProfile: addedUserProfileHadler,
+    userProfile: userProfile
   };
   return (
     <AuthContext.Provider value={contextValue}>

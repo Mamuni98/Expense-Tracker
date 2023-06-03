@@ -44,11 +44,11 @@ const SignUp = () => {
     <Container className="w-50">
       <div className="text-center mt-2 mb-5">
         <h1 className="my-1" style={{ fontFamily: "cursive", color: "aqua" }}>
-          Welcome
+          Welcome!
         </h1>
         <p className="text-white">
-          Thank you for visiting. Sign Up with your email address to create an
-          account and use our app freely.
+          Sign Up with your email address to create an
+          account.
         </p>
       </div>
       <Card

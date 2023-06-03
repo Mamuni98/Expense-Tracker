@@ -1,0 +1,36 @@
+.list {
+  margin-inline: auto;
+  margin-top: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+.listB {
+  margin-inline: auto;
+  margin-top: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.list a {
+  font: 25px Arial;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  text-decoration: none;
+}
+.list a:hover,
+a.active {
+  color: rgb(251, 233, 38);
+  text-decoration: underline;
+}
+
+.listB a {
+  font: 25px Arial;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  text-decoration: none;
+}
+.listB a:hover,
+a.active {
+  color: rgb(251, 233, 38);
+  text-decoration: underline;
+}
