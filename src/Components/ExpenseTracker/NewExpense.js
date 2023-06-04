@@ -1,6 +1,17 @@
-import { Card } from "react-bootstrap";
-
+import { Button, Card } from "react-bootstrap";
+import { FiEdit } from "react-icons/fi";
+import { useContext } from "react";
+import ExpenseContext from "../contexts/e-context";
 const NewExpense = (props) => {
+  const eContext = useContext(ExpenseContext);
+  const deleteItemHandler = (event) => {
+    event.preventDefault();
+    eContext.deleteExpense(props.id);
+  };
+  const editItemHandler = (event) => {
+    event.preventDefault();
+    eContext.setEditList(props);
+  }
   return (
     <li style={{ listStyle: "none" }}>
       <Card
@@ -10,8 +21,8 @@ const NewExpense = (props) => {
           backgroundColor: "whitesmoke",
           borderRadius: "20px",
           maxWidth: "98%",
-          marginInline:"auto",
-          marginBottom:"1rem"
+          marginInline: "auto",
+          marginBottom: "1rem",
         }}
       >
         <div className="d-flex flex-row flex-wrap justify-content-between">
@@ -35,7 +46,7 @@ const NewExpense = (props) => {
               {props.description}
             </p>
           </div>
-          <div>
+          <div className="d-flex flex-column">
             <h3
               style={{
                 color: "aqua",
@@ -45,6 +56,16 @@ const NewExpense = (props) => {
             >
               Rs.{props.amount.toFixed(2)}
             </h3>
+            <div className="d-flex flex-row flex-wrap justify-content-end">
+              <FiEdit size="40px" color="grey" onClick={editItemHandler} title="Edit"/>
+              <Button
+                className="ml-1"
+                variant="danger"
+                onClick={deleteItemHandler}
+              >
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import { Form, Button, Card, Container, InputGroup } from "react-bootstrap";
 import ExpenseContext from "../contexts/e-context";
 
@@ -8,12 +8,19 @@ const AddExpense = () => {
   const descriptionRef = useRef();
   const amountRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const objectArr = Object.keys(eContext.editList);
+    if (objectArr.length > 0) {
+      catagoryRef.current.value = eContext.editList.catagory;
+      descriptionRef.current.value = eContext.editList.description;
+      amountRef.current.value = eContext.editList.amount;
+    }
+  }, [eContext.editList]);
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
     setIsLoading(true);
     const expenseData = {
-      id: Math.random().toString(),
       catagory: catagoryRef.current.value,
       description: descriptionRef.current.value,
       amount: Number(amountRef.current.value),

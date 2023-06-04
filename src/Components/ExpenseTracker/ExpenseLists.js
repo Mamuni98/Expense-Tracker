@@ -2,8 +2,9 @@ import { Container, Card } from "react-bootstrap";
 import { useContext } from "react";
 import ExpenseContext from "../contexts/e-context";
 import NewExpense from "./NewExpense";
-const ExpenseLists = () => {
+const ExpenseLists = (props) => {
   const eContext = useContext(ExpenseContext);
+
   return (
     <Container className="w-75">
       <Card
@@ -16,7 +17,7 @@ const ExpenseLists = () => {
           margin:"auto"
         }}
       >
-        <ul>
+        <ul style={{listStyle:"none"}}>
           {eContext.expenses.map((item) => {
             return (
               <NewExpense
