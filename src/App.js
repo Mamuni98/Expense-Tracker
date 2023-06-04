@@ -7,7 +7,7 @@ import Profile from "./Components/Pages/Profile";
 import TheNavbar from "./Components/Navbar/TheNavbar";
 import AuthContext from "./Components/contexts/auth-context";
 import ForgotPassword from "./Components/Authentication/ForgotPassword";
-
+import Expense from "./Components/Pages/Expense";
 function App() {
   const authCntxt = useContext(AuthContext);
   const { IsLoggedIn } = authCntxt;
@@ -23,6 +23,7 @@ function App() {
           element={IsLoggedIn ? <Home /> : <Navigate replace to="/" />}
         />
         {IsLoggedIn && <Route path="/profile" element={<Profile />} />}
+        {IsLoggedIn && <Route path="/expense" element={<Expense />} />}
       </Routes>
     </>
   );

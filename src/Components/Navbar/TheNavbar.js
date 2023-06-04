@@ -25,15 +25,26 @@ const TheNavbar = () => {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className={classes.list}>
+              <NavLink
+                to="/home"
+                className={({ isActive }) =>
+                  isActive ? classes.active : undefined
+                }
+                end
+              >
+                Home
+              </NavLink>
+              {IsLoggedIn && (
                 <NavLink
-                  to="/home"
+                  to="/expense"
                   className={({ isActive }) =>
                     isActive ? classes.active : undefined
                   }
                   end
                 >
-                  Home
+                  Expense
                 </NavLink>
+              )}
             </Nav>
             <Nav className={classes.listB}>
               {!IsLoggedIn && (

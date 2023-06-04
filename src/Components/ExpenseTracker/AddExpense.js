@@ -1,17 +1,26 @@
-import React, { useRef } from "react";
-import { Form, Button, Card, Container } from "react-bootstrap";
+import React, { useRef, useContext, useState } from "react";
+import { Form, Button, Card, Container, InputGroup } from "react-bootstrap";
+import ExpenseContext from "../contexts/e-context";
 
-const AddExpense = (props) => {
+const AddExpense = () => {
+  const eContext = useContext(ExpenseContext);
   const catagoryRef = useRef();
   const descriptionRef = useRef();
   const amountRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
   const formSubmitHandler = (event) => {
     event.preventDefault();
-    const expense = {
+    setIsLoading(true);
+    const expenseData = {
+      id: Math.random().toString(),
       catagory: catagoryRef.current.value,
       description: descriptionRef.current.value,
-      amount: amountRef.current.value,
+      amount: Number(amountRef.current.value),
     };
+    eContext.addExpense(expenseData);
+    setIsLoading(false);
+    event.target.reset();
   };
   return (
     <Container className="w-75">
@@ -23,7 +32,7 @@ const AddExpense = (props) => {
           borderRadius: "20px",
           maxWidth: "90%",
           margin: "1rem auto",
-          marginTop: "5rem",
+          marginTop: "2rem",
         }}
       >
         <Form onSubmit={formSubmitHandler}>
@@ -48,11 +57,14 @@ const AddExpense = (props) => {
 
           <Form.Group controlId="amount">
             <Form.Label>Amount</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter Amount"
-              ref={amountRef}
-            />
+            <InputGroup>
+              <InputGroup.Text>Rs.</InputGroup.Text>
+              <Form.Control
+                type="number"
+                placeholder="Enter Amount"
+                ref={amountRef}
+              />
+            </InputGroup>
           </Form.Group>
 
           <div className="text-center mt-4">
@@ -60,8 +72,8 @@ const AddExpense = (props) => {
               <Button
                 variant="info"
                 type="submit"
-                className="text-white"
-                style={{ maxWidth: "100%", width: "100%" }}
+                className="text-white mb-2"
+                style={{ maxWidth: "25%", width: "100%" }}
               >
                 Add Expense
               </Button>
