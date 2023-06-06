@@ -1,15 +1,16 @@
 import { Card, Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
-import AuthContext from "../contexts/auth-context";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/auth";
 
 const LogIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const authCntxt = useContext(AuthContext);
   const emailRef = useRef();
   const passwordRef = useRef();
   const history = useNavigate();
+  const dispatch = useDispatch();
 
   const formSubmitHandler = async (event) => {
     event.preventDefault();
@@ -25,18 +26,20 @@ const LogIn = () => {
           returnSecureToken: true,
         }
       );
-      const token = response.data.idToken;
-      if (token) {
+      if (response.data) {
         alert("Successfully Logged In");
-        authCntxt.LogIn(token);
-        history("/home");
+        const token = response.data.idToken;
+        dispatch(authActions.logIn(token));
+        localStorage.setItem("email", email);
       }
     } catch (err) {
       const alertmsg = err.response.data.error.message;
       alert(alertmsg);
     }
+
     setIsLoading(false);
     event.target.reset();
+    history("/home");
   };
 
   return (
@@ -101,9 +104,11 @@ const LogIn = () => {
           </div>
         </Form>
         <div className="d-flex flex-row justify-content-center">
-          <Link to="/forgotPassword"><Button variant="link" className="text-info">
-            Forgot password?
-          </Button></Link>
+          <Link to="/forgotPassword">
+            <Button variant="link" className="text-info">
+              Forgot password?
+            </Button>
+          </Link>
         </div>
         <div className="text-center">
           <p>

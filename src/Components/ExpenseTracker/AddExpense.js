@@ -1,33 +1,36 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Form, Button, Card, Container, InputGroup } from "react-bootstrap";
-import ExpenseContext from "../contexts/e-context";
+import { useSelector, useDispatch } from "react-redux";
+import { expenseActions } from "../store/expense";
 
 const AddExpense = () => {
-  const eContext = useContext(ExpenseContext);
   const catagoryRef = useRef();
   const descriptionRef = useRef();
   const amountRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const editList = useSelector((state) => state.expenses.editList);
   useEffect(() => {
-    const objectArr = Object.keys(eContext.editList);
+    const objectArr = Object.keys(editList);
     if (objectArr.length > 0) {
-      catagoryRef.current.value = eContext.editList.catagory;
-      descriptionRef.current.value = eContext.editList.description;
-      amountRef.current.value = eContext.editList.amount;
+      catagoryRef.current.value = editList.catagory;
+      descriptionRef.current.value = editList.description;
+      amountRef.current.value = editList.amount;
     }
-  }, [eContext.editList]);
+  }, [editList]);
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
     setIsLoading(true);
     const expenseData = {
+      id: Math.random().toString(),
       catagory: catagoryRef.current.value,
       description: descriptionRef.current.value,
       amount: Number(amountRef.current.value),
     };
-    eContext.addExpense(expenseData);
-    setIsLoading(false);
+    dispatch(expenseActions.addExpense(expenseData));
     event.target.reset();
+    setIsLoading(false);
   };
   return (
     <Container className="w-75">
@@ -39,7 +42,7 @@ const AddExpense = () => {
           borderRadius: "20px",
           maxWidth: "90%",
           margin: "1rem auto",
-          marginTop: "2rem",
+          marginTop: "1rem",
         }}
       >
         <Form onSubmit={formSubmitHandler}>

@@ -1,17 +1,23 @@
 import { Button, Card } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
-import { useContext } from "react";
-import ExpenseContext from "../contexts/e-context";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../store/expense";
 const NewExpense = (props) => {
-  const eContext = useContext(ExpenseContext);
+  const dispatch = useDispatch();
   const deleteItemHandler = (event) => {
     event.preventDefault();
-    eContext.deleteExpense(props.id);
+    dispatch(expenseActions.deleteExpense(props.id));
   };
   const editItemHandler = (event) => {
     event.preventDefault();
-    eContext.setEditList(props);
-  }
+    const editList = {
+      id: props.id,
+      amount: props.amount,
+      description: props.description,
+      catagory: props.catagory,
+    };
+    dispatch(expenseActions.setEditList(editList));
+  };
   return (
     <li style={{ listStyle: "none" }}>
       <Card
@@ -57,7 +63,12 @@ const NewExpense = (props) => {
               Rs.{props.amount.toFixed(2)}
             </h3>
             <div className="d-flex flex-row flex-wrap justify-content-end">
-              <FiEdit size="40px" color="grey" onClick={editItemHandler} title="Edit"/>
+              <FiEdit
+                size="40px"
+                color="grey"
+                onClick={editItemHandler}
+                title="Edit"
+              />
               <Button
                 className="ml-1"
                 variant="danger"

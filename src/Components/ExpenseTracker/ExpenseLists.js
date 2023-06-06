@@ -1,9 +1,9 @@
 import { Container, Card } from "react-bootstrap";
-import { useContext } from "react";
-import ExpenseContext from "../contexts/e-context";
+import { useSelector } from "react-redux";
 import NewExpense from "./NewExpense";
+
 const ExpenseLists = (props) => {
-  const eContext = useContext(ExpenseContext);
+  const expenseList = useSelector((state) => state.expenses.expenses);
 
   return (
     <Container className="w-75">
@@ -14,11 +14,11 @@ const ExpenseLists = (props) => {
           backgroundColor: "rgb(253, 253, 216)",
           borderRadius: "20px",
           maxWidth: "90%",
-          margin:"auto"
+          margin: "auto",
         }}
       >
-        <ul style={{listStyle:"none"}}>
-          {eContext.expenses.map((item) => {
+        <ul style={{ listStyle: "none" }}>
+          {expenseList.map((item) => {
             return (
               <NewExpense
                 key={item.id}

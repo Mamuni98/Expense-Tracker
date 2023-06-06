@@ -1,15 +1,18 @@
 import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import classes from "./TheNavbar.module.css";
-import { useContext } from "react";
 import { TbCircleLetterE } from "react-icons/tb";
-import AuthContext from "../contexts/auth-context";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../store/auth";
+import { useNavigate } from "react-router-dom";
 
 const TheNavbar = () => {
-  const authCntxt = useContext(AuthContext);
-  const { IsLoggedIn } = authCntxt;
+  const navigate = useNavigate();
+  const IsLoggedIn = useSelector((state)=> state.auth.IsLoggedIn);
+  const dispatch = useDispatch();
   const logOutHandle = () => {
-    authCntxt.LogOut();
+    dispatch(authActions.logOut());
+    navigate('/');
   };
   return (
     <>

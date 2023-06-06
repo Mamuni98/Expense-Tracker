@@ -20,15 +20,15 @@ const ForgotPassword = () => {
         }
       );
       if (response.data) {
-        console.log(response.data);
+        //console.log(response.data);
         alert(
           "Request sent to your email. Check your email and reset password."
-        );
+        )
+        navigate('/logIn');
       }
-      navigate("/logIn");
     } catch (err) {
-      const alertmsg = err.response.data.error.message;
-      alert(alertmsg);
+      console.log(err);
+      alert("Request failed...Please check your email again.");
     }
     setIsLoading(false);
   };

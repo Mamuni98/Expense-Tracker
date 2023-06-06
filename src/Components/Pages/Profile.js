@@ -1,11 +1,10 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import axios from "axios";
-import AuthContext from "../contexts/auth-context";
 import { FaUserCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const authCntxt = useContext(AuthContext);
   const nameRef = useRef();
   const genderRef = useRef();
   const dobRef = useRef();
@@ -13,16 +12,19 @@ const Profile = () => {
   const [userDisplay, setUserDisplay] = useState("");
   const [updateForm, setupdateForm] = useState(false);
   const [verified, setVerified] = useState(false);
+
+  const idtoken = useSelector((state) => state.auth.token);
+
   useEffect(() => {
     const getUserDetail = async () => {
       try {
         const response = await axios.post(
           "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
           {
-            idToken: authCntxt.token,
+            idToken: idtoken,
           }
         );
-        console.log(response);
+        console.log(response.data);
         if (response.data) {
           const name = response.data.users[0].displayName;
           setUserDisplay(name);
@@ -32,7 +34,7 @@ const Profile = () => {
       }
     };
     getUserDetail();
-  }, [authCntxt.token]);
+  });
 
   const showUpdateForm = (event) => {
     event.preventDefault();
@@ -47,11 +49,12 @@ const Profile = () => {
   const verifyEmailHandler = async (event) => {
     event.preventDefault();
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
         {
           requestType: "VERIFY_EMAIL",
-          idToken: authCntxt.token,
+          idToken: token,
         }
       );
       if (response) {
@@ -72,18 +75,17 @@ const Profile = () => {
       const response = await axios.post(
         "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
         {
-          idToken: authCntxt.token,
+          idToken: idtoken,
           displayName: name,
           returnSecureToken: true,
         }
       );
+      console.log(response.data);
       if (response) {
         alert("Updated Successfully");
-        authCntxt.addeduserProfile();
       }
-    } catch (err) {
-      const alertmsg = err.response.data.error.message;
-      alert(alertmsg);
+    } catch (error) {
+      console.log(error);
     }
     setupdateForm(false);
   };
