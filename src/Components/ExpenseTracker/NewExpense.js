@@ -2,6 +2,7 @@ import { Button, Card } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { expenseActions } from "../store/expense";
+
 const NewExpense = (props) => {
   const dispatch = useDispatch();
   const deleteItemHandler = (event) => {
@@ -12,9 +13,9 @@ const NewExpense = (props) => {
     event.preventDefault();
     const editList = {
       id: props.id,
-      amount: props.amount,
-      description: props.description,
       catagory: props.catagory,
+      description: props.description,
+      amount: props.amount,
     };
     dispatch(expenseActions.setEditList(editList));
   };

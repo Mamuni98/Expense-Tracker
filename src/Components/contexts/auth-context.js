@@ -51,3 +51,21 @@ export const AuthContextProvider = (props) => {
 };
 
 //export default AuthContext;
+// const getUserDetail = async () => {
+//   try {
+//     const response = await axios.post(
+//       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
+//       {
+//         idToken: idtoken,
+//       }
+//     );
+//     //console.log(response.data);
+//     if (response.data) {
+//       const name = response.data.users[0].displayName;
+//       setUserDisplay(name);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+// getUserDetail();

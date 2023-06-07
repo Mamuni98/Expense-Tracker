@@ -20,7 +20,7 @@ const Expense = () => {
       <ExpenseLists />
       <TotalAmount />
       <div className="text-center">
-        {totalPrice > 1000 ? <Button variant="success" size="lg">Premium</Button> : ""}
+        {totalPrice > 10000 ? <Button variant="success" size="lg">Activate Premium</Button> : ""}
       </div>
     </>
   );

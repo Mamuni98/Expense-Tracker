@@ -26,12 +26,13 @@ const LogIn = () => {
           returnSecureToken: true,
         }
       );
-      if (response.data) {
-        alert("Successfully Logged In");
-        const token = response.data.idToken;
-        dispatch(authActions.logIn(token));
-        localStorage.setItem("email", email);
-      }
+      
+      const token = response.data.idToken;
+      localStorage.setItem("email", email);
+      dispatch(authActions.logIn(token));
+      alert("Successfully Logged In");
+      history("/home");
+
     } catch (err) {
       const alertmsg = err.response.data.error.message;
       alert(alertmsg);
@@ -39,7 +40,6 @@ const LogIn = () => {
 
     setIsLoading(false);
     event.target.reset();
-    history("/home");
   };
 
   return (

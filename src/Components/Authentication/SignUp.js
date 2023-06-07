@@ -40,8 +40,13 @@ const SignUp = () => {
     setIsLoading(false);
     event.target.reset();
   };
+  const tooglemanage =() => {
+    const element = document.body;
+    element.classList.toggle("light-mode");
+  }
   return (
     <Container className="w-50">
+      <button onClick={tooglemanage}>toogle</button>
       <div className="text-center mt-2 mb-5">
         <h1 className="my-1" style={{ fontFamily: "cursive", color: "aqua" }}>
           Welcome!

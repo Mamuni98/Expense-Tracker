@@ -1,40 +1,18 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import ProfileContext from "../contexts/profile-context";
 
 const Profile = () => {
   const nameRef = useRef();
   const genderRef = useRef();
   const dobRef = useRef();
   const numberRef = useRef();
-  const [userDisplay, setUserDisplay] = useState("");
+
   const [updateForm, setupdateForm] = useState(false);
   const [verified, setVerified] = useState(false);
-
-  const idtoken = useSelector((state) => state.auth.token);
-
-  useEffect(() => {
-    const getUserDetail = async () => {
-      try {
-        const response = await axios.post(
-          "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
-          {
-            idToken: idtoken,
-          }
-        );
-        console.log(response.data);
-        if (response.data) {
-          const name = response.data.users[0].displayName;
-          setUserDisplay(name);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserDetail();
-  });
+  const profileCntxt = useContext(ProfileContext);
 
   const showUpdateForm = (event) => {
     event.preventDefault();
@@ -50,43 +28,27 @@ const Profile = () => {
     event.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
         {
           requestType: "VERIFY_EMAIL",
           idToken: token,
         }
       );
-      if (response) {
+      
         alert("Successfully verified user email");
         setVerified(true);
-      }
+      
     } catch (err) {
       const alertmsg = err.response.data.error.message;
       alert(alertmsg);
     }
   };
 
-  const formSubmitHandler = async (event) => {
+  const formSubmitHandler = (event) => {
     event.preventDefault();
-    try {
-      const name = nameRef.current.value;
-      setUserDisplay(name);
-      const response = await axios.post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
-        {
-          idToken: idtoken,
-          displayName: name,
-          returnSecureToken: true,
-        }
-      );
-      console.log(response.data);
-      if (response) {
-        alert("Updated Successfully");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    const name = nameRef.current.value;
+    profileCntxt.updateUserName(name);
     setupdateForm(false);
   };
 
@@ -112,7 +74,7 @@ const Profile = () => {
                 fontWeight: "bold",
               }}
             >
-              {userDisplay}
+              {profileCntxt.name}
             </h2>
             {!verified ? (
               <Button variant="secondary" onClick={verifyEmailHandler}>

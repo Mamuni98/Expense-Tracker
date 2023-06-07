@@ -1,12 +1,11 @@
 import { Card, Container, Form, Button } from "react-bootstrap";
 import React, { useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef();
-  const navigate = useNavigate();
-
+  
   const sendRequestHandler = async (event) => {
     event.preventDefault();
     try {
@@ -24,7 +23,7 @@ const ForgotPassword = () => {
         alert(
           "Request sent to your email. Check your email and reset password."
         )
-        navigate('/logIn');
+  
       }
     } catch (err) {
       console.log(err);
@@ -91,6 +90,14 @@ const ForgotPassword = () => {
             ) : (
               <p style={{ color: "rgb(10, 216, 248)" }}>Sending request...</p>
             )}
+            <Link to='/logIn'><Button
+                variant="link"
+                type="submit"
+                className="text-success mt-2"
+                style={{ maxWidth: "100%", width: "100%" }}
+              >
+                Go to Log In
+              </Button></Link>
           </div>
         </Form>
       </Card>
@@ -98,12 +105,3 @@ const ForgotPassword = () => {
   );
 };
 export default ForgotPassword;
-
-/* <Form.Group controlId="formBasicPassword">
-<Form.Label>Password</Form.Label>
-<Form.Control
-  type="password"
-  placeholder="Password"
-  ref={passwordRef}
-/>
-</Form.Group> */
