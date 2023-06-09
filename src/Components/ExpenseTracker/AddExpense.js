@@ -42,7 +42,7 @@ const AddExpense = () => {
           borderRadius: "20px",
           maxWidth: "90%",
           margin: "1rem auto",
-          marginTop: "1rem",
+          marginTop: "2rem",
         }}
       >
         <Form onSubmit={formSubmitHandler}>

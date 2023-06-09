@@ -7,27 +7,20 @@
 html {
   font-family: "Noto Sans JP", sans-serif;
 }
-:root{
+:root {
   --black: #0f0f0f;
-  --white:#ffffff;
+  --white: #ffffff;
 }
-body {
-  margin: 0;
-  background-color:var(--black);
-  color: var(--white);
-}
+
 .light-mode {
   background-color: var(--white);
-  color:var(--black);
 }
-
-/* .dark-theme {
-  background-color: black;
+.light-mode #text {
+  color: var(--black);
 }
-.light-theme {
-  background-color: white;
-  --para-clr: rgb(31, 26, 26);
-} */
-
-/* --bg-clr: rgb(255, 255, 255);
-  --para-clr: rgb(31, 26, 26); */
+.dark-mode {
+  background-color: var(--black);
+}
+.dark-mode #text {
+  color: var(--white);
+}

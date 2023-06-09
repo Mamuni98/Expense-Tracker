@@ -1,4 +1,3 @@
-
 import React from "react";
 import LogIn from "./Components/Authentication/LogIn";
 import SignUp from "./Components/Authentication/SignUp";
@@ -12,10 +11,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { expenseActions } from "./Components/store/expense";
+import { profileActions } from "./Components/store/profile";
 
 function App() {
   const IsLoggedIn = useSelector((state) => state.auth.IsLoggedIn);
+  const idtoken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (IsLoggedIn) {
+      const getUserDetail = async () => {
+        try {
+          const response = await axios.post(
+            "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
+            {
+              idToken: idtoken,
+            }
+          );
+          const name = response.data.users[0].displayName;
+          dispatch(profileActions.finalUserName(name));
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUserDetail();
+    }
+  }, [IsLoggedIn, idtoken, dispatch]);
+
   useEffect(() => {
     const useremail = localStorage.getItem("email");
     if (useremail) {
@@ -27,8 +48,13 @@ function App() {
             `https://expense-tracker-auth-33f29-default-rtdb.firebaseio.com/${user}.json`
           );
           if (response.data) {
-            console.log(response.data);
-            dispatch(expenseActions.savedFinalList(response.data));
+            if(response.data.expense === undefined){
+              dispatch(expenseActions.savedFinalList({expense:[], totalExpense:0}));
+            }
+            else{
+              dispatch(expenseActions.savedFinalList(response.data));
+            }
+            
           }
         } catch (error) {
           console.log(error);

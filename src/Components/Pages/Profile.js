@@ -1,19 +1,24 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
-import ProfileContext from "../contexts/profile-context";
+import { useSelector, useDispatch } from "react-redux";
+import { profileActions } from "../store/profile";
 
 const Profile = () => {
   const nameRef = useRef();
-  const genderRef = useRef();
-  const dobRef = useRef();
-  const numberRef = useRef();
-
   const [updateForm, setupdateForm] = useState(false);
   const [verified, setVerified] = useState(false);
-  const profileCntxt = useContext(ProfileContext);
-
+  const dispatch = useDispatch();
+  const userName = useSelector((state) => state.profile.name);
+  const idtoken = useSelector((state) => state.auth.token);
+  let profileName;
+  if(userName === undefined){
+    profileName = "";
+  }
+  else{
+    profileName = userName;
+  }
   const showUpdateForm = (event) => {
     event.preventDefault();
     setupdateForm(true);
@@ -35,21 +40,32 @@ const Profile = () => {
           idToken: token,
         }
       );
-      
-        alert("Successfully verified user email");
-        setVerified(true);
-      
+
+      alert("Successfully verified user email");
+      setVerified(true);
     } catch (err) {
       const alertmsg = err.response.data.error.message;
       alert(alertmsg);
     }
   };
 
-  const formSubmitHandler = (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
-    const name = nameRef.current.value;
-    profileCntxt.updateUserName(name);
-    setupdateForm(false);
+    try {
+      const name = nameRef.current.value;
+      await axios.post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAsYiOMRFfKqpJUw5bwYBUc_DiWf4MyXL0",
+        {
+          idToken: idtoken,
+          displayName: name,
+          returnSecureToken: true,
+        }
+      );
+      dispatch(profileActions.addUserName(name));
+      setupdateForm(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -74,7 +90,7 @@ const Profile = () => {
                 fontWeight: "bold",
               }}
             >
-              {profileCntxt.name}
+              {profileName.length > 0 ? profileName : ""}
             </h2>
             {!verified ? (
               <Button variant="secondary" onClick={verifyEmailHandler}>
@@ -83,7 +99,7 @@ const Profile = () => {
             ) : (
               <Button variant="success">Email Verified</Button>
             )}
-            <Button variant="outline-dark" onClick={showUpdateForm}>
+            <Button variant="outline-info" onClick={showUpdateForm}>
               Edit
             </Button>
           </div>
@@ -109,7 +125,7 @@ const Profile = () => {
                 fontWeight: "bold",
               }}
             >
-              User Details
+              User Detail
             </h2>
             <Button
               variant="outline-danger"
@@ -121,33 +137,11 @@ const Profile = () => {
           </div>
           <Form onSubmit={formSubmitHandler}>
             <Form.Group controlId="name" className="mb-4">
-              <Form.Label>Full Name</Form.Label>
+              <Form.Label>User Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter Full Name"
                 ref={nameRef}
-              />
-            </Form.Group>
-            <Form.Group controlId="gender" className="mb-4">
-              <Form.Label>Gender</Form.Label>
-              <Form.Select aria-label="Default select example" ref={genderRef}>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Others</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group controlId="dob" className="mb-4">
-              <Form.Label>Date of Birth</Form.Label>
-              <Form.Control type="date" placeholder="dd/mm/yyyy" ref={dobRef} />
-            </Form.Group>
-
-            <Form.Group controlId="phoneNumber" className="mb-4">
-              <Form.Label>Phone number</Form.Label>
-              <Form.Control
-                type="tel"
-                pattern="[0-9]{10}"
-                placeholder="Enter phone number"
-                ref={numberRef}
               />
             </Form.Group>
             <div className="text-center">

@@ -40,18 +40,19 @@ const SignUp = () => {
     setIsLoading(false);
     event.target.reset();
   };
-  const tooglemanage =() => {
-    const element = document.body;
-    element.classList.toggle("light-mode");
-  }
+  // const tooglemanage =() => {
+  //   const element = document.body;
+  //   element.classList.toggle("light-mode");
+  // }
+  //<button onClick={tooglemanage}>toogle</button>
   return (
     <Container className="w-50">
-      <button onClick={tooglemanage}>toogle</button>
+      
       <div className="text-center mt-2 mb-5">
         <h1 className="my-1" style={{ fontFamily: "cursive", color: "aqua" }}>
           Welcome!
         </h1>
-        <p className="text-white">
+        <p id="text">
           Sign Up with your email address to create an
           account.
         </p>

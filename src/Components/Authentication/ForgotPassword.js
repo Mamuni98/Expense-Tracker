@@ -37,7 +37,7 @@ const ForgotPassword = () => {
         <h1 className="my-1" style={{ fontFamily: "cursive", color: "aqua" }}>
           Looks like you forgot your password
         </h1>
-        <p className="text-white">
+        <p id="text">
           Enter a valid email address to reset your password
         </p>
       </div>

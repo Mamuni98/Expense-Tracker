@@ -6,6 +6,7 @@ import { useEffect } from "react";
 const ExpenseLists = (props) => {
   const expenseList = useSelector((state) => state.expenses.expenses);
   const totalAmount = useSelector((state) => state.expenses.totalAmount);
+  const changed = useSelector((state) => state.expenses.changed);
   let expenseItems;
   if (expenseList === undefined) {
     expenseItems = [];
@@ -13,26 +14,27 @@ const ExpenseLists = (props) => {
     expenseItems = expenseList;
   }
   useEffect(() => {
+    if(changed){
     const sendData = async () => {
       const useremail = localStorage.getItem("email");
       if (useremail) {
         const user = useremail.replace("@", "").replace(".", "");
         try {
-          const response = await axios.put(
+          await axios.put(
             `https://expense-tracker-auth-33f29-default-rtdb.firebaseio.com/${user}.json`,
             {
-              expense: [...expenseList],
+              expense: expenseItems,
               totalExpense: totalAmount,
             }
           );
-          console.log(response);
         } catch (error) {
           console.log(error.message);
         }
       }
     };
     sendData();
-  }, [expenseList, totalAmount]);
+  }
+  }, [expenseItems, totalAmount, changed]);
 
   return (
     <Container className="w-75">

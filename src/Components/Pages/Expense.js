@@ -1,27 +1,32 @@
-import { Button, Badge } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
 import AddExpense from "../ExpenseTracker/AddExpense";
 import ExpenseLists from "../ExpenseTracker/ExpenseLists";
 import TotalAmount from "../ExpenseTracker/TotalAmount";
 import { useSelector } from "react-redux";
+import Switch from "./Switch";
 const Expense = () => {
+  const [showSwitch, setShowSwitch] = useState(false);
   const totalPrice = useSelector((state) => state.expenses.totalAmount);
+  const eligible = totalPrice > 10000;
+  //console.log(eligible);
+  const showSwitchHandler = () => {
+    setShowSwitch(true);
+  };
+ 
   return (
     <>
-      <div className="text-end">
-        <Button variant="info">
-          Your profile is incomplete.
-          <Link to="/profile">
-            <Badge bg="info">Complete now</Badge>
-          </Link>
-        </Button>
-      </div>
+      {eligible && showSwitch && <Switch />}
       <AddExpense />
       <ExpenseLists />
       <TotalAmount />
-      <div className="text-center">
-        {totalPrice > 10000 ? <Button variant="success" size="lg">Activate Premium</Button> : ""}
-      </div>
+      {eligible && (
+        <div className="text-center mb-5">
+          <Button variant="success" size="lg" onClick={showSwitchHandler}>
+            Activate Premium
+          </Button>
+        </div>
+      )}
     </>
   );
 };

@@ -8,14 +8,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import { Provider } from "react-redux";
 import store from "./Components/store/central-store";
-import { ProfileContextProvider } from "./Components/contexts/profile-context";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <ProfileContextProvider>
-        <App />
-      </ProfileContextProvider>
+      <App />
     </Provider>
   </BrowserRouter>
 );

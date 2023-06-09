@@ -4,6 +4,7 @@ const expenseInitialState = {
   expenses: [],
   totalAmount: 0,
   editList: {},
+  changed: false,
 };
 
 const expenseSlice = createSlice({
@@ -12,7 +13,6 @@ const expenseSlice = createSlice({
   reducers: {
     addExpense(state, action) {
       const editArr = Object.keys(state.editList);
-      let updatedItems;
       let totalPrice = 0;
       if (editArr.length > 0) {
         const existingItemIndex = state.expenses.findIndex(
@@ -20,19 +20,18 @@ const expenseSlice = createSlice({
         );
         const existingExpenseItem = state.expenses[existingItemIndex];
         const updatedItem = { id: existingExpenseItem.id, ...action.payload };
-        updatedItems = [...state.expenses];
-        updatedItems[existingItemIndex] = updatedItem;
-        updatedItems.forEach((item) => {
+        state.expenses[existingItemIndex] = updatedItem;
+        state.expenses.forEach((item) => {
           totalPrice = Number(totalPrice) + item.amount;
         });
+        
       } else {
-        updatedItems = [...state.expenses, action.payload];
-        console.log(updatedItems);
+        state.expenses.push(action.payload);
         totalPrice = state.totalAmount + action.payload.amount;
       }
-      state.expenses = updatedItems;
       state.totalAmount = totalPrice;
       state.editList = {};
+      state.changed = true;
     },
     deleteExpense(state, action) {
       const existingItemIndex = state.expenses.findIndex(
@@ -45,6 +44,7 @@ const expenseSlice = createSlice({
       state.expenses = updatedItems;
       state.totalAmount =
         Number(state.totalAmount) - existingExpenseItem.amount;
+        state.changed = true;
     },
     savedFinalList(state, action) {
       console.log(action.payload);
